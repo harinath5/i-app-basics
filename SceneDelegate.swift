@@ -1,6 +1,6 @@
 //
 //  SceneDelegate.swift
-//  ToDoAppTV
+//  UITableViewCell
 //
 //  Created by Harinath Reddy G on 30/03/20.
 //  Copyright © 2020 Harinath Reddy G. All rights reserved.

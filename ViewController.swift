@@ -1,6 +1,6 @@
 //
 //  ViewController.swift
-//  ToDoAppTV
+//  UITableViewCell
 //
 //  Created by Harinath Reddy G on 30/03/20.
 //  Copyright © 2020 Harinath Reddy G. All rights reserved.
@@ -8,55 +8,39 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, AddTask  {
-    
-    @IBOutlet weak var tableView: UITableView!
- 
-    var tasks: [Task] = []
+struct CellData {
+    let image : UIImage?
+    let message : String?
+}
+
+class TableViewController: UITableViewController {
+
+    var data = [CellData]()
     
     override func viewDidLoad() {
-        tasks.append(Task(name: "Test Object"))
+        super.viewDidLoad()
+        // Do any additional setup after loading the view.
+        
+        data = [CellData.init(image: #imageLiteral(resourceName: "Banff"), message: "Banff"),CellData.init(image: #imageLiteral(resourceName: "FitzRoy"), message: ""),CellData.init(image: #imageLiteral(resourceName: "Huang"), message: "Huang"),CellData.init(image: #imageLiteral(resourceName: "k2"), message: "k2"),CellData.init(image: #imageLiteral(resourceName: "Kailash"), message: "Kailash")]
+        
+        self.tableView.register(CustomCell.self, forCellReuseIdentifier: "custom")
+        self.tableView.rowHeight = UITableView.automaticDimension
+        self.tableView.estimatedRowHeight = 200
+        
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return tasks.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCell(withIdentifier: "taskCell", for: indexPath) as! TestCell
-        
-        cell.taskLabel.text = tasks[indexPath.row].name
-        
-        if tasks[indexPath.row].checked{
-            cell.checkBox.setBackgroundImage(#imageLiteral(resourceName: "Half"), for: UIControl.State.normal)
-        }else{
-        cell.checkBox.setBackgroundImage(#imageLiteral(resourceName: "tick"), for: UIControl.State.normal)
-        }
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = self.tableView.dequeueReusableCell(withIdentifier: "customs") as! CustomCell
+        cell.mainimage = data [indexPath.row].image
+        cell.message = data[indexPath.row].message
+        cell.layoutSubviews()
         return cell
     }
     
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return data.count
+    }
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let vc = segue.destination as! AddTaskController
-        vc.delegate = self
-        navigationController?.popViewController(animated: true)
-    }
-    
-    func addTask(name: String) {
-        tasks.append(Task(name: name))
-        tableView.reloadData()
-    }
-    
-    
-    class Task {
-        var name = ""
-        var checked = false
-        
-        convenience init(name: String){
-            self.init()
-            self.name = name
-        }
-    }
+
 }
 
